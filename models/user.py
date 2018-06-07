@@ -1,21 +1,40 @@
 from db import db
-
+from seeds.users import users
 
 class UserModel(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, default=(len(users)+ 1), primary_key=True)
+    first_name = db.Column(db.String(80))
+    last_name = db.Column(db.String(80))
     username = db.Column(db.String(80))
-    password = db.Column(db.String(80))
+    email = db.Column(db.String(80))
+    hashedPassword = db.Column(db.String(80))
+    profile_pic = db.Column(db.String(150))
+    location = db.Column(db.String(80))
+    bio = db.Column(db.String(80))
 
-    def __init__(self, username, password):
+    def __init__(self, first_name, last_name, username, email, hashedPassword, profile_pic, location, bio):
+        self.first_name = first_name
+        self.last_name = last_name
         self.username = username
-        self.password = password
+        self.email = email
+        self.hashedPassword = hashedPassword
+        self.profile_pic = profile_pic
+        self.location = location
+        self.bio = bio
 
     def json(self):
         return {
             'id': self.id,
-            'username': self.username
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'username': self.username,
+            'email': self.email,
+            'hashedPassword': self.hashedPassword,
+            'profile_pic': self.profile_pic,
+            'location': self.location,
+            'bio': self.bio
         }
 
     @classmethod

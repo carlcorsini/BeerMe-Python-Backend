@@ -11,27 +11,68 @@ from flask_jwt_extended import (
 from models.user import UserModel
 from blacklist import BLACKLIST
 
-_user_parser = reqparse.RequestParser()
-_user_parser.add_argument('username',
+_register_parser = reqparse.RequestParser()
+_register_parser.add_argument('username',
                           type=str,
                           required=True,
                           help="This field cannot be blank."
                           )
-_user_parser.add_argument('password',
+_register_parser.add_argument('hashedPassword',
                           type=str,
                           required=True,
+                          help="This field cannot be blank."
+                          )
+_register_parser.add_argument('first_name',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_register_parser.add_argument('last_name',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_register_parser.add_argument('email',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_register_parser.add_argument('profile_pic',
+                          type=str,
+                          required=False,
+                          help="This field cannot be blank."
+                          )
+_register_parser.add_argument('location',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_register_parser.add_argument('bio',
+                          type=str,
+                          required=False,
                           help="This field cannot be blank."
                           )
 
+_login_parser = reqparse.RequestParser()
+_login_parser.add_argument('username',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_login_parser.add_argument('hashedPassword',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
 
 class UserRegister(Resource):
     def post(self):
-        data = _user_parser.parse_args()
+        data = _register_parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
             return {"message": "A user with that username already exists"}, 400
 
-        user = UserModel(data['username'], data['password'])
+        user = UserModel(**data)
         user.save_to_db()
 
         return {"message": "User created successfully."}, 201
@@ -39,11 +80,11 @@ class UserRegister(Resource):
 
 class UserLogin(Resource):
     def post(self):
-        data = _user_parser.parse_args()
+        data = _login_parser.parse_args()
 
         user = UserModel.find_by_username(data['username'])
 
-        if user and safe_str_cmp(user.password, data['password']):
+        if user and safe_str_cmp(user.hashedPassword, data['hashedPassword']):
             access_token = create_access_token(identity=user.id, fresh=True)
             refresh_token = create_refresh_token(user.id)
             return {
@@ -63,10 +104,6 @@ class UserLogout(Resource):
 
 
 class User(Resource):
-    """
-    This resource can be useful when testing our Flask app. We may not want to expose it to public users, but for the
-    sake of demonstration in this course, it can be useful when we are manipulating data regarding the users.
-    """
     @classmethod
     def get(cls, user_id: int):
         user = UserModel.find_by_id(user_id)
