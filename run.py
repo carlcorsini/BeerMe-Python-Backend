@@ -1,5 +1,11 @@
 from app import app
 from db import db
+from models.user import UserModel
+from models.beer import BeerModel
+from models.brewery import BreweryModel
+from seeds.users import users
+from seeds.beers import beers
+from seeds.breweries import breweries
 
 db.init_app(app)
 
