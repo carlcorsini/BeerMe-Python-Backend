@@ -85,13 +85,13 @@ def revoked_token_callback():
 # JWT configuration ends
 
 
-@app.before_first_request
-def create_tables():
-    db.drop_all()
-    db.create_all()
-    db.engine.execute(UserModel.__table__.insert(), users)
-    db.engine.execute(BeerModel.__table__.insert(), beers)
-    db.engine.execute(BreweryModel.__table__.insert(), breweries)
+# @app.before_first_request
+# def create_tables():
+#     db.drop_all()
+#     db.create_all()
+#     db.engine.execute(UserModel.__table__.insert(), users)
+#     db.engine.execute(BeerModel.__table__.insert(), beers)
+#     db.engine.execute(BreweryModel.__table__.insert(), breweries)
 
 api.add_resource(Brewery, '/brewery/<string:name>')
 api.add_resource(BreweryList, '/breweries')
