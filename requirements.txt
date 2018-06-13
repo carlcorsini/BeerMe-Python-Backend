@@ -5,3 +5,4 @@ Flask-SQLAlchemy
 flask-cors
 uwsgi
 psycopg2
+bcrypt
