@@ -46,18 +46,18 @@ class Brewery(Resource):
                         )
 
     @classmethod
-    def get(cls, name):
-        brewery = BreweryModel.find_by_name(name)
+    def get(cls, brewery_id:int):
+        brewery = BreweryModel.find_by_id(brewery_id)
         if brewery:
             return brewery.json()
         return {'message': 'Brewery not found'}, 404
 
     @classmethod
-    def post(cls, name):
-        if BreweryModel.find_by_name(name):
-            return {'message': "A brewery with name '{}' already exists.".format(name)}, 400
+    def post(cls, brewery_id:int):
+        if BreweryModel.find_by_id(brewery_id):
+            return {'message': "A brewery with id '{}' already exists.".format(id)}, 400
 
-        brewery = BreweryModel(name)
+        brewery = BreweryModel(brewery_id)
         try:
             brewery.save_to_db()
         except:
@@ -66,8 +66,8 @@ class Brewery(Resource):
         return brewery.json(), 201
 
     @classmethod
-    def delete(cls, name):
-        brewery = BreweryModel.find_by_name(name)
+    def delete(cls, id):
+        brewery = BreweryModel.find_by_id(id)
         if brewery:
             brewery.delete_from_db()
 

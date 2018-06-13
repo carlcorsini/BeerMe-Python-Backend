@@ -1,5 +1,6 @@
 import os
 
+from flask_cors import CORS
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -8,14 +9,21 @@ from blacklist import BLACKLIST
 from resources.user import UserRegister, UserLogin, User, TokenRefresh, UserLogout
 from resources.beer import Beer, BeerList
 from resources.brewery import Brewery, BreweryList
+from resources.favorite_beers import FavoriteBeers
+from resources.reviews import Reviews
 from models.user import UserModel
 from models.beer import BeerModel
 from models.brewery import BreweryModel
+from models.favorite_beers import FavoriteBeersModel
+from models.reviews import ReviewsModel
 from seeds.users import users
 from seeds.beers import beers
 from seeds.breweries import breweries
+from seeds.favorite_beers import favorite_beers
+from seeds.reviews import reviews
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://carlcorsini:postgres@localhost/beer-me-python')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -85,21 +93,25 @@ def revoked_token_callback():
 # JWT configuration ends
 
 
-# @app.before_first_request
-# def create_tables():
-#     db.drop_all()
-#     db.create_all()
-#     db.engine.execute(UserModel.__table__.insert(), users)
-#     db.engine.execute(BeerModel.__table__.insert(), beers)
-#     db.engine.execute(BreweryModel.__table__.insert(), breweries)
+@app.before_first_request
+def create_tables():
+    db.drop_all()
+    db.create_all()
+    db.engine.execute(UserModel.__table__.insert(), users)
+    db.engine.execute(BreweryModel.__table__.insert(), breweries)
+    db.engine.execute(BeerModel.__table__.insert(), beers)
+    db.engine.execute(FavoriteBeersModel.__table__.insert(), favorite_beers)
+    db.engine.execute(ReviewsModel.__table__.insert(), reviews)
 
-api.add_resource(Brewery, '/brewery/<string:name>')
+api.add_resource(Brewery, '/breweries/<int:brewery_id>')
 api.add_resource(BreweryList, '/breweries')
-api.add_resource(Beer, '/beer/<int:beer_id>')
+api.add_resource(Beer, '/beers/<int:beer_id>')
 api.add_resource(BeerList, '/beers')
+api.add_resource(FavoriteBeers, '/user/<int:user_id>/beers')
+api.add_resource(Reviews, '/reviews')
 api.add_resource(UserRegister, '/register')
-api.add_resource(UserLogin, '/login')
-api.add_resource(User, '/user/<int:user_id>')
+api.add_resource(UserLogin, '/token')
+api.add_resource(User, '/users/<int:user_id>')
 api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(UserLogout, '/logout')
 

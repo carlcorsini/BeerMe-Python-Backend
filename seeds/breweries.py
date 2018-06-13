@@ -1,6 +1,5 @@
 breweries = [
   {
-    "id": 1,
     "brewery_name": "Russian River Brewing Company",
     "brewery_logo":
       "https://i0.wp.com/beerstreetjournal.com/wp-content/uploads/Russian-River-Logo1.png",
@@ -12,7 +11,6 @@ breweries = [
     "url": "https://russianriverbrewing.com/"
   },
   {
-    "id": 2,
     "brewery_name": "21st Amendment Brewery",
     "brewery_logo":
       "https://static1.squarespace.com/static/510a02e0e4b0086d33c3c797/t/552c7766e4b005f6ac4eeffc/1428977513009/",
@@ -24,7 +22,6 @@ breweries = [
     "url": "http://21st-amendment.com/"
   },
   {
-    "id": 3,
     "brewery_name": "Anchor Brewing Company",
     "brewery_logo":
       "https://pbs.twimg.com/profile_images/837042309912879104/OUOlDYjU.jpg",
@@ -36,7 +33,6 @@ breweries = [
     "url": "https://www.anchorbrewing.com/"
   },
   {
-    "id": 4,
     "brewery_name": "Fieldwork Brewing Company",
     "brewery_logo":
       "http://beerpulse.com/wp-content/uploads/2016/05/Fieldwork-Brewing-logo-BeerPulse.jpg",
@@ -48,7 +44,6 @@ breweries = [
     "url": "https://fieldworkbrewing.com"
   },
   {
-    "id": 5,
     "brewery_name": "HenHouse Brewing Company",
     "brewery_logo":
       "http://sonoma-figgirl.com/wp-content/uploads/2016/04/HENHOUSE.jpg",
@@ -60,7 +55,6 @@ breweries = [
     "url": "http://www.henhousebrewing.com/"
   },
   {
-    "id": 6,
     "brewery_name": "Lagunitas Brewing Company",
     "brewery_logo":
       "https://images2.porchdrinking.com/2018/02/LagunitasCCBW2.jpg",
@@ -72,7 +66,6 @@ breweries = [
     "url": "https://lagunitas.com/"
   },
   {
-    "id": 7,
     "brewery_name": "Almanac Beer Co.",
     "brewery_logo":
       "https://www.coldist.com/wp-content/uploads/2016/07/Almanac.jpg",
@@ -84,7 +77,6 @@ breweries = [
     "url": "https://www.almanacbeer.com/"
   },
   {
-    "id": 8,
     "brewery_name": "Barebottle Brewery Company",
     "brewery_logo":
       "https://www.orchestratedbeer.com/wp-content/uploads/Barebottle-logo.jpg",
@@ -96,7 +88,6 @@ breweries = [
     "url": "http://www.barebottle.com/"
   },
   {
-    "id": 9,
     "brewery_name": "Drakes Brewing Co.",
     "brewery_logo":
       "https://cdn.shopify.com/s/files/1/0889/8644/products/XwYV0WgjRlNRQW5yBHxg_Drakes_20Logo_20D_201c_20172_20_1_grande.png?v=1491242989",
@@ -108,7 +99,6 @@ breweries = [
     "url": "https://drinkdrakes.com/"
   },
   {
-    "id": 10,
     "brewery_name": "Fort Point Beer Co.",
     "brewery_logo":
       "http://discussions.probrewer.com/attachment.php?attachmentid=54894&d=1511377805",
@@ -120,7 +110,6 @@ breweries = [
     "url": "https://www.fortpointbeer.com/"
   },
   {
-    "id": 11,
     "brewery_name": "Speakeasy Ales & Lagers",
     "brewery_logo":
       "http://tailgaterssportsbars.com/images/beer%20icons/speakeasy.jpg",

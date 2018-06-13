@@ -1,6 +1,5 @@
 users = [
   {
-    "id": 1,
     "first_name": "Carl",
     "last_name": "Corsini",
     "username": "Beers4Fears",
@@ -13,7 +12,6 @@ users = [
     "bio": "Software Engineer"
   },
   {
-    "id": 2,
     "first_name": "Jon",
     "last_name": "Riemer",
     "username": "jonbeersly",
@@ -26,7 +24,6 @@ users = [
     "bio": "Software Engineer"
   },
   {
-    "id": 3,
     "first_name": "Glen",
     "last_name": "Pegado",
     "username": "glenpgd",
@@ -38,7 +35,6 @@ users = [
     "bio": "Software Engineer"
   },
   {
-    "id": 4,
     "first_name": "Panda",
     "last_name": "Bear",
     "username": "pandaBear",
@@ -50,7 +46,6 @@ users = [
     "bio": "I love bamboo"
   },
   {
-    "id": 5,
     "first_name": "Tom",
     "last_name": "Myspace",
     "username": "tommyspace",
@@ -62,7 +57,6 @@ users = [
     "bio": "Created Myspace"
   },
   {
-    "id": 6,
     "first_name": "Michael",
     "last_name": "Corleon",
     "username": "thegodfather",

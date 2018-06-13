@@ -3,9 +3,11 @@ from db import db
 from models.user import UserModel
 from models.beer import BeerModel
 from models.brewery import BreweryModel
+from models.reviews import ReviewsModel
 from seeds.users import users
 from seeds.beers import beers
 from seeds.breweries import breweries
+from seeds.reviews import seeds
 
 db.init_app(app)
 
@@ -16,3 +18,4 @@ def create_tables():
     db.engine.execute(UserModel.__table__.insert(), users)
     db.engine.execute(BeerModel.__table__.insert(), beers)
     db.engine.execute(BreweryModel.__table__.insert(), breweries)
+    db.engine.execute(ReviewsModel.__table__.insert(), reviews)

@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+import bcrypt
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import (
     create_access_token,
@@ -8,8 +9,9 @@ from flask_jwt_extended import (
     get_raw_jwt,
     jwt_required
 )
-from models.user import UserModel
+
 from blacklist import BLACKLIST
+from models.user import UserModel
 
 _register_parser = reqparse.RequestParser()
 _register_parser.add_argument('username',
@@ -17,7 +19,7 @@ _register_parser.add_argument('username',
                           required=True,
                           help="This field cannot be blank."
                           )
-_register_parser.add_argument('hashedPassword',
+_register_parser.add_argument('password',
                           type=str,
                           required=True,
                           help="This field cannot be blank."
@@ -37,42 +39,59 @@ _register_parser.add_argument('email',
                           required=True,
                           help="This field cannot be blank."
                           )
-_register_parser.add_argument('profile_pic',
-                          type=str,
-                          required=False,
-                          help="This field cannot be blank."
-                          )
-_register_parser.add_argument('location',
+
+_login_parser = reqparse.RequestParser()
+_login_parser.add_argument('email',
                           type=str,
                           required=True,
                           help="This field cannot be blank."
                           )
-_register_parser.add_argument('bio',
+_login_parser.add_argument('password',
                           type=str,
-                          required=False,
+                          required=True,
                           help="This field cannot be blank."
                           )
 
-_login_parser = reqparse.RequestParser()
-_login_parser.add_argument('username',
+_edit_parser = reqparse.RequestParser()
+_edit_parser.add_argument('first_name',
                           type=str,
                           required=True,
                           help="This field cannot be blank."
                           )
-_login_parser.add_argument('hashedPassword',
+_edit_parser.add_argument('last_name',
                           type=str,
                           required=True,
                           help="This field cannot be blank."
                           )
+_edit_parser.add_argument('username',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_edit_parser.add_argument('location',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+_edit_parser.add_argument('bio',
+                          type=str,
+                          required=True,
+                          help="This field cannot be blank."
+                          )
+
 
 class UserRegister(Resource):
     def post(self):
         data = _register_parser.parse_args()
-
-        if UserModel.find_by_username(data['username']):
-            return {"message": "A user with that username already exists"}, 400
-
+        hashedPassword = bcrypt.hashpw(data.password.encode('utf8'), bcrypt.gensalt(10))
+        data.hashedPassword = hashedPassword.decode('utf8')
+        data.pop('password', 0)
+        print(hashedPassword)
+        print(data)
+        if UserModel.find_by_email(data['email']):
+            return {"message": "A user with that email already exists"}, 400
         user = UserModel(**data)
+        print(user)
         user.save_to_db()
 
         return {"message": "User created successfully."}, 201
@@ -82,13 +101,13 @@ class UserLogin(Resource):
     def post(self):
         data = _login_parser.parse_args()
 
-        user = UserModel.find_by_username(data['username'])
-
-        if user and safe_str_cmp(user.hashedPassword, data['hashedPassword']):
-            access_token = create_access_token(identity=user.id, fresh=True)
+        user = UserModel.find_by_email(data['email'])
+        print(user)
+        if user and bcrypt.checkpw(data['password'].encode('utf8'), user.hashedPassword.encode('utf8')):
+            token = create_access_token(identity=user.id, fresh=True)
             refresh_token = create_refresh_token(user.id)
             return {
-                       'access_token': access_token,
+                       'token': token,
                        'refresh_token': refresh_token
                    }, 200
 
@@ -110,6 +129,28 @@ class User(Resource):
         if not user:
             return {'message': 'User Not Found'}, 404
         return user.json(), 200
+
+    @classmethod
+    def put(cls, user_id: int):
+        data = _edit_parser.parse_args()
+        user = UserModel.find_by_id(user_id)
+
+        userJSON = user.json()
+        data['email'] = userJSON['email']
+        data['hashedPassword'] = userJSON['hashedPassword']
+        data['profile_pic'] = userJSON['profile_pic']
+        updated_user = UserModel(**data)
+        
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.username = data['username']
+        user.location = data['location']
+        user.bio = data['bio']
+        user.save_to_db()
+
+
+        return updated_user.json(), 200
+
 
     @classmethod
     def delete(cls, user_id: int):
