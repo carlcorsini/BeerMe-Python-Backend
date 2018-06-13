@@ -7,7 +7,7 @@ from models.reviews import ReviewsModel
 from seeds.users import users
 from seeds.beers import beers
 from seeds.breweries import breweries
-from seeds.reviews import seeds
+from seeds.reviews import reviews
 
 db.init_app(app)
 
