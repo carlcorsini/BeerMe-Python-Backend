@@ -97,16 +97,16 @@ def revoked_token_callback():
 # JWT configuration ends
 
 
-@app.before_first_request
-def create_tables():
-    db.drop_all()
-    db.create_all()
-    db.engine.execute(UserModel.__table__.insert(), users)
-    db.engine.execute(BreweryModel.__table__.insert(), breweries)
-    db.engine.execute(BeerModel.__table__.insert(), beers)
-    db.engine.execute(FavoriteBeersModel.__table__.insert(), favorite_beers)
-    db.engine.execute(ReviewsModel.__table__.insert(), reviews)
-    db.engine.execute(FriendshipModel.__table__.insert(), friendships)
+# @app.before_first_request
+# def create_tables():
+#     db.drop_all()
+#     db.create_all()
+#     db.engine.execute(UserModel.__table__.insert(), users)
+#     db.engine.execute(BreweryModel.__table__.insert(), breweries)
+#     db.engine.execute(BeerModel.__table__.insert(), beers)
+#     db.engine.execute(FavoriteBeersModel.__table__.insert(), favorite_beers)
+#     db.engine.execute(ReviewsModel.__table__.insert(), reviews)
+#     db.engine.execute(FriendshipModel.__table__.insert(), friendships)
 
 api.add_resource(Brewery, '/breweries/<int:brewery_id>')
 api.add_resource(BreweryList, '/breweries')
