@@ -4,6 +4,7 @@ from seeds.users import users
 from models.beer import BeerModel
 from models.reviews import ReviewsModel
 from models.favorite_beers import FavoriteBeersModel
+from models.friendships import FriendshipModel
 from collections import Counter
 
 class UserModel(db.Model):
@@ -20,6 +21,12 @@ class UserModel(db.Model):
     bio = db.Column(db.String(80))
     beers = db.relationship('FavoriteBeersModel', lazy='dynamic')
     reviews = db.relationship('ReviewsModel', lazy='dynamic')
+    friends = db.relationship(
+        'UserModel', secondary=FriendshipModel.__table__,
+        primaryjoin=(FriendshipModel.__table__.c.follower_id == id),
+        secondaryjoin=(FriendshipModel.__table__.c.followee_id == id),
+        backref=db.backref('FriendshipModel', lazy='dynamic'), lazy='dynamic')
+
 
 
     def __init__(self, first_name, last_name, username, email, hashedPassword, profile_pic = 'https://image1.masterfile.com/getImage/NjUzLTAzODQzODg3ZW4uMDAwMDAwMDA=AE7cdS/653-03843887en_Masterfile.jpg', location = 'BeerLand, CA', bio = 'I like beer :)'):
@@ -45,6 +52,10 @@ class UserModel(db.Model):
         reviews_list = ReviewsModel.find_by_user_id(self.id)
         reviews = [review.json() for review in reviews_list]
 
+        friends_list = FriendshipModel.find_by_id(self.id)
+        friendships = [friend.json() for friend in friends_list]
+        friends = [friend['followee_id'] for friend in friendships]
+        
         return {
             'id': self.id,
             'first_name': self.first_name,
@@ -55,9 +66,10 @@ class UserModel(db.Model):
             'profile_pic': self.profile_pic,
             'location': self.location,
             'bio': self.bio,
+            'favorite_style': c.most_common(1)[0][0],
             'beers': favorites,
             'reviews': reviews,
-            'favorite_style': c.most_common(1)[0][0]
+            'friends' : friends
         }
 
     @classmethod

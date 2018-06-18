@@ -14,7 +14,7 @@ class ReviewsModel(db.Model):
     review_img = db.Column(db.String(250))
     rating = db.Column(db.Integer, default=1)
 
-    def __init__(self, user_id, beer_id, review_title, review_body, review_img, rating):
+    def __init__(self, user_id, beer_id, review_title, review_body, rating, review_img):
         self.user_id = user_id
         self.beer_id = beer_id
         self.review_title = review_title
